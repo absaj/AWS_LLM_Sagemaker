@@ -64,7 +64,7 @@ class NewsDataset(Dataset):
 
     def __getitem__(self, index):
          # uses integer-based indexing meaning index is treated as a position in the df. 0 selects the row at the specified index, TITLE column
-        title = str(self.data.iloc[index, 0])
+        title = str(self.data.iloc[index, 0])  # iloc means index location, iloc[index-> go to index here and select the element in the 0th column
         title = " ".join(title.split())
         inputs = self.tokenizer.encode_plus(
             title,
