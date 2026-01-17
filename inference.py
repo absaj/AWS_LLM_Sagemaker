@@ -43,6 +43,7 @@ def model_fn(model_dir):
     print("Loading model from :", model_dir)
 
     model = DistilBERTClass() # was DistilBertClass
+        #inference we need CPU not GPU
     model_state_dict = torch.load(os.path.join(model_dir, 'pytorch_distilbert_news.bin'),map_location = torch.device('cpu'))
     model.load_state_dict(model_state_dict)
 
