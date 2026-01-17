@@ -273,7 +273,12 @@ def main():
     print("start")
 
     parser = argparse.ArgumentParser()
-
+'''             hyperparameters = {'epochs':2,
+                                     'train_batch_size':4,
+                                     'valid_batch_size':2,
+                                    'learning_rate':1e-05
+                                  },
+'''
     parser.add_argument("--epochs",type=int,default=10)
     parser.add_argument("--train_batch_size",type=int,default=4)
     parser.add_argument("--valid_batch_size",type=int,default=2)
