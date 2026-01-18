@@ -220,9 +220,14 @@ def train(epoch, model, device, training_loader, optimizer, loss_function):
         outputs = model(ids, mask)
 
 
-        loss = loss_function(outputs,targets)
-        tr_loss += loss.item()
+        loss = loss_function(outputs,targets) # tells what is right and what is wrong
+        # outputs of this loss function is logits # targets from data loader 
+        tr_loss += loss.item()  # for this epoch we add all the loss to get cumulative loss 
+        # every time in each epoch we resets it to 0 
+        # each epoch we go through entire data set 
+        # it recalculates the weights adjust itself 
         big_val, big_idx = torch.max(outputs.data, dim = 1)
+        # finds the predicted maximum value along the first columns which represent the classes here 
         n_correct += calculate_accu(big_idx, targets)
 
         nb_tr_steps +=1
