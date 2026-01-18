@@ -136,20 +136,39 @@ class DistilBERTClass(torch.nn.Module): # inheriting base model this model is es
 
         super(DistilBERTClass,self).__init__() # call the Parent Class  module i.e toech.nn.module to initialise this 
 #super().__init__() also works
-        self.l1 = DistilBertModel.from_pretrained('distilbert-base-uncased') # Is the backbone of out custom neural network this already has its weights trained, we are not training afresh but 
+        self.l1 = DistilBertModel.from_pretrained('distilbert-base-uncased') 
+        ''' Transfer learning
+        # Is the backbone of out custom neural network this already has its weights trained, we are not training afresh but 
         # we are adding additional layers on top of it
-        #l1 is layer tokenization is also done using the same DistilBertModel.from_trainer('distilbert-base-uncased') from transformer we import distillbert tokenzier and distillbert Model 
+        #l1 is layer tokenization is also done using the same DistilBertModel.from_trainer('distilbert-base-uncased') from 
+        transformer we import distillbert tokenzier and distillbert Model 
 #we are no fine tuning the base distillbert base model with newer data. 
         # this line LOADS a pretrainer distilbert model with uncased vocabluray means ignore upper and lower case 
         #helping to extract the featurres
-        
+        '''
         self.pre_classifier = torch.nn.Linear(768,768)
-#  this 
+#  this is a linear fully connected layer, the distill bert has 768 dimensions. this linear layer will transform this before applying the classifier
+        '''Purpose: It provides the model with additional trainable parameters (768×768 weights) to "re-interpret" the DistilBERT 
+        features before they go to the final classification step. It acts like a "pre-processing" brain for the classifier.
+        This is a weight matrix (plus a bias). It performs a matrix multiplication to transform the data. 
+        It has 768×768≈590,000 trainable parameters. Its job is to "re-think" the features
+        '''
+        
         self.dropout = torch.nn.Dropout(0.3)
-#regularizatio drop 30% of weights of the newrual network prevent too focussed on specific workd drop random neuron. 
+'''
+regularizatio drop 30% of weights of the newrual network prevent too focussed on specific workd drop random neuron. 
+        Prevents Overfitting, drop the wqeights during the learning time
+'''
         self.classifier = torch.nn.Linear(768,4)
+''' final classifier is of size 4 outputs i.e 4 classes moidel predicts one of 4 classes as outputs. It takes 768 inputs 
+outputs are called logits
+these are final output values
+'''
 
-    def forward(self,input_ids, attention_mask):
+    def forward(self,input_ids, attention_mask):  
+        ''' 
+        # outputs logits these are just raw number we need to send these logits throught softmax layer to get probabiltieis
+        '''
 
         output_1 = self.l1(input_ids=input_ids,attention_mask=attention_mask)
 
