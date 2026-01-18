@@ -127,18 +127,26 @@ training_loader = DataLoader(training_set, **train_parameters)
 testing_loader = DataLoader(testing_set, **test_parameters)
 
 
-class DistilBERTClass(torch.nn.Module):
+class DistilBERTClass(torch.nn.Module): # inheriting base model this model is essential for building any custom model
+    # base class for all neural network in pytorch
 
-    def __init__(self):
+    def __init__(self): # init is run everytime the class is called 
+        # always define the layers, trainable parameters in this init method for effective learning and parameter management and efficient computation
+        
 
-        super(DistilBERTClass,self).__init__()
-
-        self.l1 = DistilBertModel.from_pretrained('distilbert-base-uncased')
-
+        super(DistilBERTClass,self).__init__() # call the Parent Class  module i.e toech.nn.module to initialise this 
+#super().__init__() also works
+        self.l1 = DistilBertModel.from_pretrained('distilbert-base-uncased') # Is the backbone of out custom neural network this already has its weights trained, we are not training afresh but 
+        # we are adding additional layers on top of it
+        #l1 is layer tokenization is also done using the same DistilBertModel.from_trainer('distilbert-base-uncased') from transformer we import distillbert tokenzier and distillbert Model 
+#we are no fine tuning the base distillbert base model with newer data. 
+        # this line LOADS a pretrainer distilbert model with uncased vocabluray means ignore upper and lower case 
+        #helping to extract the featurres
+        
         self.pre_classifier = torch.nn.Linear(768,768)
-
+#  this 
         self.dropout = torch.nn.Dropout(0.3)
-
+#regularizatio drop 30% of weights of the newrual network prevent too focussed on specific workd drop random neuron. 
         self.classifier = torch.nn.Linear(768,4)
 
     def forward(self,input_ids, attention_mask):
